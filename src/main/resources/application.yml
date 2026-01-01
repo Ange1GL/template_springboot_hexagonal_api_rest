@@ -1,0 +1,72 @@
+spring:
+    application:
+        name: app
+    datasource:
+        url: jdbc:postgresql://localhost:5436/hexagonal?currentSchema=public
+        driver-class-name: org.postgresql.Driver
+        username: alarios
+        password: Passw0rd
+        hikari:
+            auto-commit: false
+
+    hikari:
+        maximum-pool-size: 10
+        minimum-idle: 1
+        idle-timeout: 30000
+        pool-name: HikariCP
+        max-lifetime: 200000
+        connection-timeout: 30000
+
+    jpa:
+        properties:
+          hibernate:
+              dialect: org.hibernate.dialect.PostgreSQLDialect
+              ddl-auto: none
+              format_sql: false
+        show-sql: false
+
+server:
+    servlet:
+        context-path: /api
+    port: 9000
+
+security:
+    jwt:
+        secret-key: 9a8b7c6d5e4f3g2h1i0j9k8l7m6n5o4p3q2r1s0t
+        expiration: 15
+        refresh-expiration: 43200
+
+    cookie:
+        name: auth-token
+        http-only: true
+        secure: true
+        max-age: 900
+        same-site: Strict
+
+
+#    spring.application.name=onboarding-service
+#
+#    server.servlet.context-path=/onboarding/api
+
+
+cors:
+    allowed-origins:
+        - http://localhost:4200
+    allowed-methods:
+        - GET
+        - POST
+        - PUT
+        - PATCH
+        - DELETE
+        - OPTIONS
+    allowed-headers:
+        - "*"
+    exposed-headers:
+        - Authorization
+    allow-credentials: true
+    max-age: 3600
+
+
+#cors.allowed-origins=http://localhost:4200,https://caproveedoresqa-e4acdag8bkazheg4.westus3-01.azurewebsites.net,${FRONTEND_URL}
+#cors.allowed-methods=GET,POST,PUT,DELETE,OPTIONS
+#cors.allowed-headers=*

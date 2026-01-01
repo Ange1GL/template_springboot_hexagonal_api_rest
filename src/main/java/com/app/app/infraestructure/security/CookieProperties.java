@@ -1,0 +1,20 @@
+package com.app.app.infraestructure.security;
+
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
+
+@Component
+@ConfigurationProperties(prefix = "security.cookie")
+@Getter
+@Setter
+public class CookieProperties {
+    private String name;
+    private boolean httpOnly;
+    private boolean secure;
+    private long maxAge;
+    private String sameSite;
+}
+
+

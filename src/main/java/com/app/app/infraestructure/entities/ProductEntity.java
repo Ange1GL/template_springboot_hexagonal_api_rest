@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Table(name = "product")
-public class ProductEntity
+public class ProductEntity extends BaseEntity
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,11 +34,6 @@ public class ProductEntity
     @Column(name = "subtotal")
     BigDecimal subtotal;
 
-    @Column(name = "created_at")
-    LocalDateTime createdAt;
-
-    @Column(name = "updated_at")
-    LocalDateTime updatedAt;
 
 
     public static ProductEntity fromDomainModel(Product product) {
@@ -47,8 +42,7 @@ public class ProductEntity
         entity.setPrice(product.getPrice());
         entity.setStock(product.getStock());
         entity.setSubtotal(product.getPrice().multiply(BigDecimal.valueOf(product.getStock())));
-        entity.setCreatedAt(LocalDateTime.now());
-        entity.setUpdatedAt(LocalDateTime.now());
+
         return entity;
     }
 

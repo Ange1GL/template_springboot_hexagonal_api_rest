@@ -47,9 +47,5 @@ public class JpaUserRepositoryAdapter implements UserRepository {
         return jpaRepositoryUser.existsByEmail(email);
     }
 
-//    Optional<User> findByEmail(String email);
-//
-//    User save(User user);
-//
-//    boolean existsByEmail(String email);
+
 }

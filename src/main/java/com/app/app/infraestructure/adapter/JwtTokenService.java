@@ -1,7 +1,8 @@
-package com.app.app.application.service;
+package com.app.app.infraestructure.adapter;
 
 import com.app.app.domain.model.User;
 import com.app.app.domain.port.out.TokenService;
+import com.app.app.domain.port.out.UserRepository;
 import com.app.app.infraestructure.security.excepcion.JwtAuthenticationException;
 import com.app.app.infraestructure.security.excepcion.JwtErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import java.time.temporal.ChronoUnit;
 public class JwtTokenService implements TokenService {
     private final JwtEncoder jwtEncoder;
     private final JwtDecoder jwtDecoder;
+    private  final UserRepository userRepository;
 
     @Value("${security.jwt.expiration}")
     private long expirationMinutes;
@@ -26,20 +28,21 @@ public class JwtTokenService implements TokenService {
     private long refreshExpirationMinutes;
 
     @Override
-    public String generateToken(User user) {
-        return generateJwt(user , expirationMinutes);
+    public String generateToken(String subject) {
+        return generateJwt(subject , expirationMinutes);
     }
 
     @Override
-    public String generateRefreshToken(User user) {
-        return generateJwt(user, refreshExpirationMinutes);
+    public String generateRefreshToken(String subject) {
+        return generateJwt(subject, refreshExpirationMinutes);
     }
 
 
-    private String generateJwt(User user, long minutes) {
+    private String generateJwt(String subject, long minutes) {
         Instant now = Instant.now();
         JwtClaimsSet claims = JwtClaimsSet.builder()
-                .subject(user.getEmail())
+                .subject(subject)
+                .claim("email", subject)
                 .issuedAt(now)
                 .expiresAt(now.plus(minutes, ChronoUnit.MINUTES))
                 .build();
@@ -80,5 +83,6 @@ public class JwtTokenService implements TokenService {
             throw new JwtAuthenticationException(JwtErrorCode.TOKEN_INVALID);
         }
     }
+
 
 }

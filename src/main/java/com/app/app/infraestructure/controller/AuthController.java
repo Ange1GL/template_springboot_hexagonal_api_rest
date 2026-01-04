@@ -1,19 +1,18 @@
 package com.app.app.infraestructure.controller;
 
+import com.app.app.application.service.RefreshTokenUseCase;
 import com.app.app.domain.model.User;
 import com.app.app.domain.port.in.AuthenticateUserUseCase;
 import com.app.app.domain.port.in.RegisterUserCase;
 import com.app.app.domain.port.out.TokenService;
 import com.app.app.domain.shared.AuthError;
 import com.app.app.domain.shared.Result;
-import com.app.app.infraestructure.dto.AuthTokenResponseDTO;
-import com.app.app.infraestructure.dto.CreateUserRequest;
-import com.app.app.infraestructure.dto.LoginRequest;
-import com.app.app.infraestructure.dto.ResponseDTO;
+import com.app.app.infraestructure.dto.*;
 import com.app.app.infraestructure.mapper.AuthResultHttpMapper;
 import com.app.app.infraestructure.util.CookieUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +30,7 @@ public class AuthController {
     private final CookieUtil cookieUtil;
     private final RegisterUserCase registerUserCase;
     private final AuthResultHttpMapper authResultHttpMapper;
+    private  final RefreshTokenUseCase refreshTokenUseCase;
 
     @PostMapping("/login")
     public ResponseEntity<ResponseDTO<AuthTokenResponseDTO>> login(@RequestBody LoginRequest request, HttpServletResponse response) {
@@ -48,8 +48,8 @@ public class AuthController {
 
         User user = result.getValue();
 
-        String token = tokenService.generateToken(user);
-        String refreshToken = tokenService.generateRefreshToken(user);
+        String token = tokenService.generateToken(user.getEmail());
+        String refreshToken = tokenService.generateRefreshToken(user.getEmail());
 
         response.addCookie(cookieUtil.createAuthCookie(token));
 
@@ -76,8 +76,8 @@ public class AuthController {
 
          User  registeredUser = result.getValue();
 
-        final String token = tokenService.generateToken(registeredUser);
-        final String refreshToken = tokenService.generateRefreshToken(registeredUser);
+        final String token = tokenService.generateToken(registeredUser.getEmail());
+        final String refreshToken = tokenService.generateRefreshToken(registeredUser.getEmail());
 
         AuthTokenResponseDTO authTokenResponseDTO =AuthTokenResponseDTO.builder().token(token).refreshToken(refreshToken).build();
 
@@ -87,5 +87,22 @@ public class AuthController {
                 .build();
 
         return ResponseEntity.ok(responseDTO);
+    }
+
+
+    @PostMapping("/refresh")
+    public ResponseEntity<Void> refreshToken(
+            @RequestBody RefreshRequest request,
+            HttpServletResponse response) {
+
+        String refreshToken = request.getRefreshToken();
+
+        if (!tokenService.validateToken(refreshToken)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String newJwt = refreshTokenUseCase.refreshToken(refreshToken);
+        response.addCookie(cookieUtil.createAuthCookie(newJwt));
+
+        return ResponseEntity.ok().build();
     }
 }

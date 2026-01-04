@@ -2,7 +2,7 @@ spring:
     application:
         name: app
     datasource:
-        url: jdbc:postgresql://localhost:5436/hexagonal?currentSchema=public
+        url: jdbc:postgresql://host.docker.internal:5436/hexagonal?currentSchema=public
         driver-class-name: org.postgresql.Driver
         username: alarios
         password: Passw0rd
@@ -21,7 +21,7 @@ spring:
         properties:
           hibernate:
               dialect: org.hibernate.dialect.PostgreSQLDialect
-              ddl-auto: validate
+              ddl-auto: none
               format_sql: false
         show-sql: false
 

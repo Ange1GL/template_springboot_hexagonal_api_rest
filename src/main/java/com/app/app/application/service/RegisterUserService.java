@@ -19,18 +19,17 @@ public class RegisterUserService  implements RegisterUserCase {
     @Override
     public Result<User, AuthError> register(String email, String rawPassword, String name) {
         if (userRepository.existsByEmail(email)) {
-            throw new IllegalStateException("Email already in use");
+            return Result.failure(AuthError.EMAIL_ALREADY_IN_USE);
         }
 
         String hashedPassword = passwordHasher.hash(rawPassword);
 
-        User user = new User(
-                null,
-                email,
-                name,
-                hashedPassword,
-                true
-        );
+        User user = User.builder()
+                .email(email)
+                .password(hashedPassword)
+                .name(name)
+                .active(true)
+                .build();
 
         user =  userRepository.save(user);
         return Result.success(user);

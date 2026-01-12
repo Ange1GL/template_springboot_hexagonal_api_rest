@@ -1,14 +1,9 @@
 spring:
+    profiles:
+        active: dev
+
     application:
         name: app
-    datasource:
-        url: jdbc:postgresql://host.docker.internal:5436/hexagonal?currentSchema=public
-        driver-class-name: org.postgresql.Driver
-        username: alarios
-        password: Passw0rd
-        hikari:
-            auto-commit: false
-
     hikari:
         maximum-pool-size: 10
         minimum-idle: 1
@@ -16,14 +11,6 @@ spring:
         pool-name: HikariCP
         max-lifetime: 200000
         connection-timeout: 30000
-
-    jpa:
-        properties:
-          hibernate:
-              dialect: org.hibernate.dialect.PostgreSQLDialect
-              ddl-auto: none
-              format_sql: false
-        show-sql: false
 
 server:
     servlet:
@@ -51,7 +38,7 @@ security:
 
 cors:
     allowed-origins:
-        - http://localhost:4200
+        - http://localhost
     allowed-methods:
         - GET
         - POST

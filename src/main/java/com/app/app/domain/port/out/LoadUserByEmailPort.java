@@ -1,7 +1,7 @@
-package com.app.app.domain.port.in;
+package com.app.app.domain.port.out;
 
 import com.app.app.domain.model.User;
 
-public interface LoadUserByEmailUseCase {
+public interface LoadUserByEmailPort {
     User loadByEmail(String email);
 }

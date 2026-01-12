@@ -66,7 +66,3 @@ cors:
     allow-credentials: true
     max-age: 3600
 
-
-#cors.allowed-origins=http://localhost:4200,https://caproveedoresqa-e4acdag8bkazheg4.westus3-01.azurewebsites.net,${FRONTEND_URL}
-#cors.allowed-methods=GET,POST,PUT,DELETE,OPTIONS
-#cors.allowed-headers=*

@@ -1,7 +1,6 @@
 package com.app.app.application.service;
 
 import com.app.app.domain.model.User;
-import com.app.app.domain.port.in.LoadUserByEmailUseCase;
 import com.app.app.domain.port.in.RegisterUserCase;
 import com.app.app.domain.port.out.PasswordHasher;
 import com.app.app.domain.port.out.UserRepository;

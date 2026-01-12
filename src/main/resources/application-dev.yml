@@ -1,0 +1,15 @@
+spring:
+    datasource:
+        url: jdbc:postgresql://localhost:5436/hexagonal?currentSchema=public
+        driver-class-name: org.postgresql.Driver
+        username: alarios
+        password: Passw0rd
+        hikari:
+            auto-commit: false
+    jpa:
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.PostgreSQLDialect
+                ddl-auto: validate
+                format_sql: false
+        show-sql: false
